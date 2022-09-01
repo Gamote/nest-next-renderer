@@ -1,8 +1,10 @@
 # Nest Next Renderer
 
+[![npm version](https://img.shields.io/npm/v/nest-next-renderer)](https://www.npmjs.com/package/nest-next-renderer) [![npm downloads/month](https://img.shields.io/npm/dm/nest-next-renderer)](https://www.npmjs.com/package/nest-next-renderer) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Gamote/nest-next-renderer/blob/master/LICENSE)
+
 Module for rendering Next.js pages inside Next.js applications.
 
-> At the moment it works just with Next + Fastify.
+> **Note:** At the moment this package works only with Next **and** Fastify.
 
 ## Installation
 
@@ -16,7 +18,7 @@ This is the full list of peer dependencies:
 - [Fastify](https://www.fastify.io/): `yarn add fastify`
 - [Next](https://nextjs.org/), [React](https://reactjs.org/) and [ReactDOM](https://reactjs.org/): `yarn add react react-dom next`
 
-> Note: In theory you should install just `react`, `react-dom` and `next`
+> **Note:** In theory you should install just `react`, `react-dom` and `next`
 because `@nestjs/common` and `fastify` might be already installed.
 
 ### Install

@@ -21,6 +21,8 @@ This is the full list of peer dependencies:
 > **Note:** In theory you should install just `react`, `react-dom` and `next`
 because `@nestjs/common` and `fastify` might be already installed.
 
+> **Note:** If you are using TypeScript, you should install `@types/react` and `@types/react-dom` as well.
+
 ### Install
 
 Run: `yarn add nest-next-renderer`

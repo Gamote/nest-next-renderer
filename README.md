@@ -27,4 +27,29 @@ Run: `yarn add nest-next-renderer`
 
 ## Usage
 
-TODO
+Import the module:
+
+```typescript
+import { Module } from '@nestjs/common';
+import { NextRendererModule } from 'nest-next-renderer';
+
+@Module({
+  imports: [
+    NextRendererModule.forRoot({
+      dev: process.env.NODE_ENV !== 'production',
+      dir: './client',
+      customServer: true,
+      conf: {
+        // Next.js config
+      },
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+Render from a controller:
+
+```typescript
+// WIP
+```

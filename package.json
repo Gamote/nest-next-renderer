@@ -1,0 +1,53 @@
+{
+  "name": "nest-next-renderer",
+  "description": "Render Next.js pages in Nest.js applications",
+  "version": "1.0.0",
+  "repository": "https://github.com/Gamote/nest-next-renderer.git",
+  "author": "David Gamote <contact@gamote.ro>",
+  "keywords": [
+    "nest",
+    "next",
+    "renderer",
+    "react",
+    "react-dom",
+    "nest-next",
+    "fastify"
+  ],
+  "license": "MIT",
+  "files": ["dist"],
+  "main": "dist/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "postbuild": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
+    "publish": "yarn build && npm publish"
+  },
+  "peerDependencies": {
+    "next": "^12.2.5",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "fastify": "^4.5.3",
+    "@nestjs/common": "^9.0.11"
+  },
+  "devDependencies": {
+    "next": "^12.2.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "fastify": "^4.5.3",
+    "@nestjs/common": "^9.0.11",
+    "@types/node": "^18.7.14",
+    "@types/react": "^18.0.18",
+    "@types/react-dom": "^18.0.6",
+    "eslint": "8.22.0",
+    "eslint-config-next": "^12.2.5",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "@typescript-eslint/parser": "^5.36.1",
+    "reflect-metadata": "^0.1.13",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "rxjs": "^7.5.6",
+    "typescript": "^4.8.2"
+  }
+}

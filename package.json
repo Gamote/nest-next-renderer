@@ -14,12 +14,12 @@
     "fastify"
   ],
   "license": "MIT",
-  "files": ["dist"],
+  "files": ["dist", "index.ts", "index.d.ts", "index.js"],
   "main": "dist/index.js",
   "types": "build/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "postbuild": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
+    "build": "rm -rf dist && tsc",
+    "pack": "npm pack && tar -xvzf *.tgz && rm -rf package *.tgz",
     "publish": "yarn build && npm publish"
   },
   "peerDependencies": {

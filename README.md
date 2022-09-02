@@ -55,3 +55,9 @@ Render from a controller:
 ```typescript
 // WIP
 ```
+
+# Contributing
+
+You can contribute to this project by opening an issue or creating a pull request.
+
+> **Note:** If you want to test this library locally by using yarn link, you should know that there will be a conflict between the local `@nestjs/common` and `@nestjs/core` packages (devDependencies) and the ones in the test project. To fix this, you'll have to use the same module path in both projects.

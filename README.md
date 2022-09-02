@@ -61,3 +61,22 @@ Render from a controller:
 You can contribute to this project by opening an issue or creating a pull request.
 
 > **Note:** If you want to test this library locally by using yarn link, you should know that there will be a conflict between the local `@nestjs/common` and `@nestjs/core` packages (devDependencies) and the ones in the test project. To fix this, you'll have to use the same module path in both projects.
+
+## TODO(s)
+- [ ] Add tests
+- [ ] Add documentation and example
+- [ ] Document the default values for the `NextRendererModuleOptions`
+- [ ] Add `@Render` decorator
+- [ ] Make it work with Express or others
+- [ ] Make it possible to render any page without a controller (`useFileSystemPublicRoutes` + `@Get('*')` and `@Post('*')` that calls `next.handle`)
+- [ ] Generate enum for the `view` parameter based on the content of the `pages` folder
+- [ ] Server not working with hot reload (if it's on the consumer side document the proper configuration)
+- [ ] Add a filter for errors and let the consumer choose how does he want to handle them (with Nest or with Next) ([example](https://github.com/kyle-mccarthy/nest-next/blob/156b4b5cd00951b898e5c4c647337ce32bae75f5/lib/render.filter.ts))
+- [ ] Add command to copy the dist folder to a project that linked to this package for development purposes
+  
+  Example:
+  ```bash
+  1. Create a GIT ignored file called `linked-projects.paths` in the root of this project containing the paths to the projects that are linked to this package
+  2. Create a script in the `package.json` file that copies the `dist` folder to the paths specified in the `linked-projects.paths` file
+  3. Run the script after every build
+  ```

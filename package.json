@@ -1,7 +1,7 @@
 {
   "name": "nest-next-renderer",
   "description": "Render Next.js pages in Nest.js applications",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "repository": "https://github.com/Gamote/nest-next-renderer.git",
   "author": "David Gamote <contact@gamote.ro>",
   "keywords": [

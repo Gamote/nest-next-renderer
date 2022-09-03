@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { NextServer } from 'next/dist/server/next';
 import next from 'next';
 import { BaseNextRequest, BaseNextResponse } from 'next/dist/server/base-http';
@@ -8,6 +8,7 @@ import { NEXT_RENDERER_OPTIONS } from './next-renderer.constants';
 import { HttpAdapterHost } from '@nestjs/core';
 import { FastifyInstance } from 'fastify';
 import { NextRendererModule } from './next-renderer.module';
+import { ParsedUrlQuery } from 'querystring';
 
 /**
  * Declare the extra types added by the Fastify plugin.
@@ -24,13 +25,16 @@ declare module 'fastify' {
   }
 }
 
+/**
+ * Service that handles the rendering of the Next.js application
+ */
 @Injectable()
-export class NextRendererService {
+export class NextRendererService implements OnModuleInit {
   private nextServer: NextServer;
 
   constructor(
     @Inject(NEXT_RENDERER_OPTIONS)
-    private readonly options: NextRendererOptions,
+    private readonly _options: NextRendererOptions,
     private readonly adapterHost: HttpAdapterHost,
   ) {}
 
@@ -41,13 +45,14 @@ export class NextRendererService {
     // Initialize the Next server
     try {
       this.nextServer = next({
+        dev: process.env.NODE_ENV !== 'production',
         customServer: true,
-        ...this.options,
+        ...(this._options.nextServerOptions ?? {}),
         conf: {
           // Disabling file-system routing, so we can explicitly handle the routing
           // https://nextjs.org/docs/advanced-features/custom-server#disabling-file-system-routing
           useFileSystemPublicRoutes: false,
-          ...this.options.conf,
+          ...(this._options.nextServerOptions?.conf ?? {}),
         },
       });
 
@@ -78,18 +83,46 @@ export class NextRendererService {
       });
     });
 
-    Logger.log('NextRendererService was initialized.', NextRendererModule.name);
+    Logger.log(
+      `${NextRendererService.name} was initialized.`,
+      NextRendererModule.name,
+    );
   }
 
-  //
-  getNextServer(): NextServer {
+  /**
+   * Get options passed to the NextRendererModule
+   */
+  public get options() {
+    return this._options;
+  }
+
+  /**
+   * Get the Next server instance
+   */
+  public getNextServer(): NextServer {
     return this.nextServer;
   }
 
-  // TODO: replace with filter
-  // https://github.com/kyle-mccarthy/nest-next/blob/156b4b5cd00951b898e5c4c647337ce32bae75f5/lib/render.filter.ts#L51
-  render<Props>(
-    req: BaseNextRequest | IncomingMessage,
+  /**
+   * Handle a request using the Next server
+   * @param req
+   * @param res
+   */
+  public handle(req: IncomingMessage, res: ServerResponse) {
+    const handle = this.nextServer.getRequestHandler();
+
+    return handle(req, res);
+  }
+
+  /**
+   * Render a view using Next.js
+   * @param req
+   * @param res
+   * @param view
+   * @param data
+   */
+  public render<Props>(
+    req: IncomingMessage | BaseNextRequest,
     res: ServerResponse | BaseNextResponse,
     view: string,
     data: Props,
@@ -97,5 +130,23 @@ export class NextRendererService {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return this.nextServer.render(req, res, view, { props: data ?? {} });
+  }
+
+  /**
+   * Render an error using Next.js
+   * @param error
+   * @param req
+   * @param res
+   * @param pathname
+   * @param query
+   */
+  public renderError<TError extends Error>(
+    error: TError,
+    req: IncomingMessage | BaseNextRequest,
+    res: ServerResponse | BaseNextResponse,
+    pathname: string,
+    query: ParsedUrlQuery,
+  ): Promise<void> {
+    return this.nextServer.renderError(error, req, res, pathname, query);
   }
 }

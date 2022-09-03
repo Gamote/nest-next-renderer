@@ -42,3 +42,21 @@ export type FastifyGetServerSideProps<
   Q extends ParsedUrlQuery = ParsedUrlQuery,
   D extends PreviewData = PreviewData,
 > = CustomGetServerSideProps<P, Q, D, Query, FastifyRequest, FastifyReply>;
+
+/**
+ * Level of error pass-through
+ */
+export enum ErrorPassThroughLevel {
+  /**
+   * Pass through all errors
+   */
+  ALL = 'all',
+  /**
+   * Pass through 404 errors
+   */
+  NOT_FOUND = 'not-found',
+  /**
+   * Pass no errors
+   */
+  NONE = 'none',
+}

@@ -7,10 +7,9 @@ export class NextRendererController {
   constructor(private nextRendererService: NextRendererService) {}
 
   @Get('_next/*')
-  static(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
-    const handle = this.nextRendererService.getNextServer().getRequestHandler();
-
+  @Get('static/*')
+  internalPaths(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     // We need to return the response or the request will hang
-    return handle(req.raw, res.raw);
+    return this.nextRendererService.handle(req.raw, res.raw);
   }
 }

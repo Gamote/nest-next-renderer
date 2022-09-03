@@ -12,26 +12,26 @@ This package requires to be installed in a Next application that is using Fastif
 
 1. Make sure you have the peer-dependencies installed: `react`, `react-dom` and `next`.
 
-    > **Note:** If you are using TypeScript, you should install `@types/react` and `@types/react-dom` as well.
+   > **Note:** If you are using TypeScript, you should install `@types/react` and `@types/react-dom` as well.
 
     <details>
       <summary>ℹ️ Full list of peer dependencies</summary>
 
-      In theory, you should install just `react`, `react-dom` and `next` because the rest of the dependencies should already be installed in your project.
+   In theory, you should install just `react`, `react-dom` and `next` because the rest of the dependencies should already be installed in your project.
 
-      - [Nest](https://nestjs.com/) packages: `yarn add @nestjs/core @nestjs/common`
-      - [Fastify](https://www.fastify.io/): `yarn add fastify`
-      - [React](https://reactjs.org/), [ReactDOM](https://reactjs.org/) and [Next](https://nextjs.org/): `yarn add react react-dom next`
-  
+  - [Nest](https://nestjs.com/) packages: `yarn add @nestjs/core @nestjs/common`
+  - [Fastify](https://www.fastify.io/): `yarn add fastify`
+  - [React](https://reactjs.org/), [ReactDOM](https://reactjs.org/) and [Next](https://nextjs.org/): `yarn add react react-dom next`
+
     </details>
 
 2. Install `nest-next-renderer` using **yarn**
 
-    `yarn add nest-next-renderer`
+   `yarn add nest-next-renderer`
 
-    or **npm**
+   or **npm**
 
-    `npm i nest-next-renderer`
+   `npm i nest-next-renderer`
 
 ## Usage
 
@@ -44,8 +44,17 @@ import { NextRendererModule } from 'nest-next-renderer';
 @Module({
   imports: [
     NextRendererModule.forRoot({
-      dev: process.env.NODE_ENV !== 'production',
-      dir: './client',
+      nextServerOptions: {
+        dir: './client',
+      },
+      /**
+       * The level of error pass-through for your application
+       * This is useful because Nest doesn't know how to handle Next's routing for assets.
+       * So in this case we might want to pass through 404 errors to Next.
+       *
+       * @default PassThroughErrorType.ALL
+       */
+      errorPassThrough: ErrorPassThroughLevel.ALL,
     }),
   ],
 })
@@ -65,17 +74,17 @@ export class AuthController {
   constructor(
     private readonly userService: UsersService,
   ) {}
-  
+
   @Get('index')
   async getIndex(@Res() res: FastifyReply) {
     return res.render('/', undefined);
   }
-  
+
   @Get('login')
   async getIdentifier(@Res() res: FastifyReply) {
     return res.render<LoginPageProps>('/login', undefined);
   }
-  
+
   @Post('login')
   async postIdentifier(
     @Body('username') username: string,
@@ -109,17 +118,14 @@ You can contribute to this project by opening an issue or creating a pull reques
     /path/to/your/project/node_modules/nest-next-renderer
     ```
 
-    Now everytime you change something, the changes will be reflected in your test project.
+  Now everytime you change something, the changes will be reflected in your test project.
 
 ## TODO(s)
 
 - [ ] Add tests
-- [ ] Add documentation and example
-- [ ] Document the default values for the `NextRendererModuleOptions`
+- [ ] Add documentation and example (document the default values for the `NextRendererModuleOptions`)
 - [ ] Add `@Render` decorator
 - [ ] Make it work with Express or others
 - [ ] Make it possible to render any page without a controller (`useFileSystemPublicRoutes` + `@Get('*')` and `@Post('*')` that calls `next.handle`)
 - [ ] Generate enum for the `view` parameter based on the content of the `pages` folder
 - [ ] Server not working with hot reload (if it's on the consumer side document the proper configuration)
-- [ ] Add a filter for errors and let the consumer choose how does he want to handle them (with Nest or with Next) ([example](https://github.com/kyle-mccarthy/nest-next/blob/156b4b5cd00951b898e5c4c647337ce32bae75f5/lib/render.filter.ts))
-- [ ] Add handler for the Next public files

@@ -7,6 +7,8 @@ import {
 } from './next-renderer.interfaces';
 import { NEXT_RENDERER_OPTIONS } from './next-renderer.constants';
 import { NextRendererController } from './next-renderer.controller';
+import { NextRendererFilter } from './next-renderer.filter';
+import { APP_FILTER } from '@nestjs/core';
 
 @Global()
 @Module({})
@@ -50,6 +52,22 @@ export class NextRendererModule {
   }
 
   /**
+   * Get the list of providers used by the module
+   * @private
+   */
+  private static getCommonProviders(): Provider[] {
+    return [
+      NextRendererService,
+      {
+        inject: [NextRendererService],
+        provide: APP_FILTER,
+        useFactory: (options: NextRendererService) =>
+          new NextRendererFilter(options),
+      },
+    ];
+  }
+
+  /**
    * Method that helps us generate the module
    * @param options
    * @public
@@ -57,7 +75,10 @@ export class NextRendererModule {
   public static forRoot(options: NextRendererOptions): DynamicModule {
     return {
       module: NextRendererModule,
-      providers: [this.createOptionsProvider(options), NextRendererService],
+      providers: [
+        this.createOptionsProvider(options),
+        ...this.getCommonProviders(),
+      ],
       controllers: [NextRendererController],
       exports: [NextRendererService],
     };
@@ -75,7 +96,7 @@ export class NextRendererModule {
       imports: options.imports || [],
       providers: [
         this.createAsyncOptionsProvider(options),
-        NextRendererService,
+        ...this.getCommonProviders(),
       ],
       controllers: [NextRendererController],
       exports: [NextRendererService],

@@ -7,7 +7,6 @@ export class NextRendererController {
   constructor(private nextRendererService: NextRendererService) {}
 
   @Get('_next/*')
-  @Get('static/*')
   static(@Req() req: FastifyRequest, @Res() res: FastifyReply) {
     const handle = this.nextRendererService.getNextServer().getRequestHandler();
 

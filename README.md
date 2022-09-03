@@ -35,7 +35,7 @@ This package requires to be installed in a Next application that is using Fastif
 
 ## Usage
 
-Assuming that you have a Next application in the `./client` directory here is how you import the `NextRendererModule` module:
+Assuming that you have a Next application in the `./client` directory with 2 pages (`Index` and `Login`) here is how you import the `NextRendererModule` module:
 
 ```typescript
 import { Module } from '@nestjs/common';
@@ -57,8 +57,8 @@ Example of a controller:
 ```typescript
 import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { FastifyReply } from 'fastify';
-import { UsersService } from './users/users.service';
-import { LoginPageProps } from '../../shared/LoginPageProps';
+import { UsersService } from './services/users.service';
+import { LoginPageProps } from './shared/LoginPageProps';
 
 @Controller()
 export class AuthController {

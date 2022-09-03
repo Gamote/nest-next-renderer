@@ -10,26 +10,32 @@ Module for rendering Next.js pages inside Next.js applications.
 
 This package requires to be installed in a Next application that is using Fastify as platform ([read more](https://docs.nestjs.com/techniques/performance)).
 
-### Peer dependencies
+1. Make sure you have the peer-dependencies installed: `react`, `react-dom` and `next`.
 
-This is the full list of peer dependencies:
+    > **Note:** If you are using TypeScript, you should install `@types/react` and `@types/react-dom` as well.
 
-- [Nest](https://nestjs.com/): `yarn add @nestjs/common`
-- [Fastify](https://www.fastify.io/): `yarn add fastify`
-- [Next](https://nextjs.org/), [React](https://reactjs.org/) and [ReactDOM](https://reactjs.org/): `yarn add react react-dom next`
+    <details>
+      <summary>ℹ️ Full list of peer dependencies</summary>
 
-> **Note:** In theory you should install just `react`, `react-dom` and `next`
-because `@nestjs/common` and `fastify` might be already installed.
+      In theory, you should install just `react`, `react-dom` and `next` because the rest of the dependencies should already be installed in your project.
 
-> **Note:** If you are using TypeScript, you should install `@types/react` and `@types/react-dom` as well.
+      - [Nest](https://nestjs.com/) packages: `yarn add @nestjs/core @nestjs/common`
+      - [Fastify](https://www.fastify.io/): `yarn add fastify`
+      - [React](https://reactjs.org/), [ReactDOM](https://reactjs.org/) and [Next](https://nextjs.org/): `yarn add react react-dom next`
+  
+    </details>
 
-### Install
+2. Install `nest-next-renderer` using `yarn`
 
-Run: `yarn add nest-next-renderer`
+    `yarn add nest-next-renderer`
+
+    or `npm`
+
+    `npm i nest-next-renderer`
 
 ## Usage
 
-Import the module:
+Assuming that you have a Next application in the `./client` directory here is how you import the `NextRendererModule` module:
 
 ```typescript
 import { Module } from '@nestjs/common';
@@ -40,20 +46,54 @@ import { NextRendererModule } from 'nest-next-renderer';
     NextRendererModule.forRoot({
       dev: process.env.NODE_ENV !== 'production',
       dir: './client',
-      customServer: true,
-      conf: {
-        // Next.js config
-      },
     }),
   ],
 })
 export class AppModule {}
 ```
 
-Render from a controller:
+Example of a controller:
 
 ```typescript
-// WIP
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { FastifyReply } from 'fastify';
+import { UsersService } from './users/users.service';
+import { LoginPageProps } from '../../shared/LoginPageProps';
+
+@Controller()
+export class AuthController {
+  constructor(
+    private readonly userService: UsersService,
+  ) {}
+  
+  @Get('index')
+  async getIndex(@Res() res: FastifyReply) {
+    return res.render('/', undefined);
+  }
+  
+  @Get('login')
+  async getIdentifier(@Res() res: FastifyReply) {
+    return res.render<LoginPageProps>('/login', undefined);
+  }
+  
+  @Post('login')
+  async postIdentifier(
+    @Body('username') username: string,
+    @Body('password') password: string,
+    @Res() res: FastifyReply,
+  ) {
+    try {
+      // Validate credentials, set cookies etc.
+      return res.redirect(302, '/');
+    } catch (e) {
+      return res.render<LoginPageProps>('/login', {
+        error: e.message,
+        username,
+        password,
+      });
+    }
+  }
+}
 ```
 
 # Contributing
@@ -63,6 +103,7 @@ You can contribute to this project by opening an issue or creating a pull reques
 > **Note:** If you want to test this library locally by using yarn link, you should know that there will be a conflict between the local `@nestjs/common` and `@nestjs/core` packages (devDependencies) and the ones in the test project. To fix this, you'll have to use the same module path in both projects.
 
 ## TODO(s)
+
 - [ ] Add tests
 - [ ] Add documentation and example
 - [ ] Document the default values for the `NextRendererModuleOptions`
@@ -80,3 +121,4 @@ You can contribute to this project by opening an issue or creating a pull reques
   2. Create a script in the `package.json` file that copies the `dist` folder to the paths specified in the `linked-projects.paths` file
   3. Run the script after every build
   ```
+- [ ] Add handler for the Next public files

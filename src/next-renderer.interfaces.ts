@@ -25,7 +25,7 @@ export type NextRendererOptions = {
    * This is useful because Nest doesn't know how to handle Next's routing for assets.
    * So in this case we might want to pass through 404 errors to Next.
    *
-   * @default PassThroughErrorType.ALL
+   * @default ErrorPassThroughLevel.ALL
    */
   errorPassThrough?: ErrorPassThroughLevel;
   /**

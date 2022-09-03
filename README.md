@@ -17,11 +17,11 @@ This package requires to be installed in a Next application that is using Fastif
     <details>
       <summary>ℹ️ Full list of peer dependencies</summary>
 
-   In theory, you should install just `react`, `react-dom` and `next` because the rest of the dependencies should already be installed in your project.
+      In theory, you should install just `react`, `react-dom` and `next` because the rest of the dependencies should already be installed in your project.
 
-  - [Nest](https://nestjs.com/) packages: `yarn add @nestjs/core @nestjs/common`
-  - [Fastify](https://www.fastify.io/): `yarn add fastify`
-  - [React](https://reactjs.org/), [ReactDOM](https://reactjs.org/) and [Next](https://nextjs.org/): `yarn add react react-dom next`
+      - [Nest](https://nestjs.com/) packages: `yarn add @nestjs/core @nestjs/common`
+      - [Fastify](https://www.fastify.io/): `yarn add fastify`
+      - [React](https://reactjs.org/), [ReactDOM](https://reactjs.org/) and [Next](https://nextjs.org/): `yarn add react react-dom next`
 
     </details>
 
@@ -52,7 +52,7 @@ import { NextRendererModule } from 'nest-next-renderer';
        * This is useful because Nest doesn't know how to handle Next's routing for assets.
        * So in this case we might want to pass through 404 errors to Next.
        *
-       * @default PassThroughErrorType.ALL
+       * @default ErrorPassThroughLevel.ALL
        */
       errorPassThrough: ErrorPassThroughLevel.ALL,
     }),

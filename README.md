@@ -100,7 +100,16 @@ export class AuthController {
 
 You can contribute to this project by opening an issue or creating a pull request.
 
-> **Note:** If you want to test this library locally by using yarn link, you should know that there will be a conflict between the local `@nestjs/common` and `@nestjs/core` packages (devDependencies) and the ones in the test project. To fix this, you'll have to use the same module path in both projects.
+**Note:** If you want to test this library locally by using `yarn link`, you should know that there will be a conflict between the Nest packages used by this project (`@nestjs/common` and `@nestjs/core`) and the ones in your test project. To fix this you have 2 options:
+- use the same modules path in both projects by linking the Nest modules too;
+- paste the path to your test project's `nest-next-renderer` folder in the `.linked.packages` file and use the `yarn dev` while developing. Example:
+
+    ```
+    # .linked.packages
+    /path/to/your/project/node_modules/nest-next-renderer
+    ```
+
+    Now everytime you change something, the changes will be reflected in your test project.
 
 ## TODO(s)
 
@@ -113,12 +122,4 @@ You can contribute to this project by opening an issue or creating a pull reques
 - [ ] Generate enum for the `view` parameter based on the content of the `pages` folder
 - [ ] Server not working with hot reload (if it's on the consumer side document the proper configuration)
 - [ ] Add a filter for errors and let the consumer choose how does he want to handle them (with Nest or with Next) ([example](https://github.com/kyle-mccarthy/nest-next/blob/156b4b5cd00951b898e5c4c647337ce32bae75f5/lib/render.filter.ts))
-- [ ] Add command to copy the dist folder to a project that linked to this package for development purposes
-  
-  Example:
-  ```bash
-  1. Create a GIT ignored file called `linked-projects.paths` in the root of this project containing the paths to the projects that are linked to this package
-  2. Create a script in the `package.json` file that copies the `dist` folder to the paths specified in the `linked-projects.paths` file
-  3. Run the script after every build
-  ```
 - [ ] Add handler for the Next public files

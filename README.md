@@ -25,11 +25,11 @@ This package requires to be installed in a Next application that is using Fastif
   
     </details>
 
-2. Install `nest-next-renderer` using `yarn`
+2. Install `nest-next-renderer` using **yarn**
 
     `yarn add nest-next-renderer`
 
-    or `npm`
+    or **npm**
 
     `npm i nest-next-renderer`
 

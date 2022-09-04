@@ -49,9 +49,14 @@ export class NextRendererFilter implements OnModuleInit, ExceptionFilter {
     }
 
     // Let next handle the error
-    // It's possible that the error doesn't contain a status code
+    // It's possible that the error or response doesn't contain a status code
     // if this is the case treat it as an internal server error
-    res.statusCode = error && error.status ? error.status : 500;
+    res.statusCode =
+      error && error.status
+        ? error.status
+        : res.statusCode ??
+          res.raw.statusCode ??
+          HttpStatus.INTERNAL_SERVER_ERROR;
 
     const { pathname, query } = parseUrl(req.url, true);
 
@@ -64,11 +69,11 @@ export class NextRendererFilter implements OnModuleInit, ExceptionFilter {
         pathname,
         query,
       );
+    }
 
-      // Check if the response was already sent (in this case by the consumer's error handler)
-      if (res.sent === true || res.raw.headersSent) {
-        return;
-      }
+    // Check if the response was already sent (e.g. by the consumer's error handler)
+    if (res.sent === true || res.raw.headersSent) {
+      return;
     }
 
     // If the consumer wants to let Next handle the 404 errors

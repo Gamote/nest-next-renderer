@@ -115,6 +115,24 @@ export class NextRendererService implements OnModuleInit {
   }
 
   /**
+   * Remove the leading slash from a path
+   * @param path
+   * @private
+   */
+  private removeLeadingSlash(path: string): string {
+    return path.replace(/^\/+/, '');
+  }
+
+  /**
+   * Add the leading slash from a path
+   * @param path
+   * @private
+   */
+  private addLeadingSlash(path: string): string {
+    return `/${path}`;
+  }
+
+  /**
    * Render a view using Next.js
    * @param req
    * @param res
@@ -127,9 +145,16 @@ export class NextRendererService implements OnModuleInit {
     view: string,
     data: Props,
   ): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return this.nextServer.render(req, res, view, { props: data ?? {} });
+    return this.nextServer.render(
+      req,
+      res,
+      this.addLeadingSlash(this.removeLeadingSlash(view)),
+      {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        props: data ?? {},
+      },
+    );
   }
 
   /**
@@ -147,6 +172,12 @@ export class NextRendererService implements OnModuleInit {
     pathname: string,
     query: ParsedUrlQuery,
   ): Promise<void> {
-    return this.nextServer.renderError(error, req, res, pathname, query);
+    return this.nextServer.renderError(
+      error,
+      req,
+      res,
+      this.addLeadingSlash(this.removeLeadingSlash(pathname)),
+      query,
+    );
   }
 }

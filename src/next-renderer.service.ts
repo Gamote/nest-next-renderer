@@ -71,16 +71,12 @@ export class NextRendererService implements OnModuleInit {
     const fastifyApp =
       this.adapterHost.httpAdapter.getInstance() as FastifyInstance;
 
-    const nextRender = this.nextServer.render.bind(this.nextServer);
+    const nextRender = this.render.bind(this);
 
     fastifyApp.decorateReply('render', function <
       Props,
     >(view: string, data: Props): Promise<void> {
-      return nextRender(this.request.raw, this.raw, view, {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        props: data ?? {},
-      });
+      return nextRender(this.request.raw, this.raw, view, data);
     });
 
     Logger.log(
@@ -150,6 +146,7 @@ export class NextRendererService implements OnModuleInit {
       res,
       this.addLeadingSlash(this.removeLeadingSlash(view)),
       {
+        // TODO: give up on using this to pass non query params - and use the req object instead
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         props: data ?? {},
